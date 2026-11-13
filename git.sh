@@ -14,7 +14,7 @@ echo -e "${CYAN}${BOLD}========================================${NC}\n"
 
 # 1. Check if inside a Git repository
 if ! git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
-    echo -e "${RED}✖ Error: Yeh folder ek Git repository nahi hai!${NC}\n"
+    echo -e "${RED}✖ Error: This folder is not a Git repository!${NC}\n"
     exit 1
 fi
 
