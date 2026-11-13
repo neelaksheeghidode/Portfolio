@@ -10,6 +10,16 @@
 </head>
 <body>
 
+    <!-- Fixed Full-Screen Scroll-Driven Video Background -->
+    <div class="fixed-video-bg-container">
+        <video id="scroll-video" preload="auto" muted playsinline class="fixed-scroll-video">
+            <source src="hero_video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="fixed-video-overlay"></div>
+        <div class="fixed-video-grid"></div>
+    </div>
+
     <!-- Cyberpunk Navigation Bar -->
     <header class="navbar">
         <a href="index.html" class="logo">
@@ -30,7 +40,7 @@
     <!-- Main Container -->
     <main class="page-container">
         
-        <!-- Hero Section with Cyber HUD Video -->
+        <!-- Hero Section Layered Over Fixed Video -->
         <section class="hero-section">
             <div class="hero-content">
                 <div class="page-tag">
@@ -43,22 +53,6 @@
                 <div class="btn-group">
                     <a href="projects.html" class="primary-btn">Explore Proof of Work →</a>
                     <a href="platforms.html" class="secondary-btn">Initiate Dispatch</a>
-                </div>
-            </div>
-
-            <!-- Cyberpunk Video HUD Visual Frame -->
-            <div class="hero-visual-container">
-                <div class="floating-status-pill">● SYSTEM: OPTIMIZED</div>
-                <div class="video-wrapper">
-                    <!-- Woman touching sunglasses video -->
-                    <video autoplay muted loop playsinline class="hero-video">
-                        <source src="hero_video.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                    <div class="video-overlay-gradient"></div>
-                </div>
-                <div class="floating-tech-badge">
-                    <code>docker run -d --name devops-core</code>
                 </div>
             </div>
         </section>
@@ -131,6 +125,45 @@
             <a href="platforms.html">Platforms</a>
         </div>
     </footer>
+
+    <!-- Smooth Scroll-Driven Video Scrubbing Script -->
+    <script>
+        (function() {
+            const video = document.getElementById('scroll-video');
+            if (!video) return;
+
+            let targetTime = 0;
+            let currentTime = 0;
+            const ease = 0.08; // Smooth LERP interpolation factor
+
+            // Wait for video metadata to read duration
+            video.addEventListener('loadedmetadata', initScrub);
+            if (video.readyState >= 1) initScrub();
+
+            function initScrub() {
+                const duration = video.duration || 1;
+
+                function onScroll() {
+                    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+                    const maxScroll = (document.documentElement.scrollHeight - window.innerHeight) || 1;
+                    const progress = Math.min(Math.max(scrollY / maxScroll, 0), 1);
+                    targetTime = progress * duration;
+                }
+
+                window.addEventListener('scroll', onScroll, { passive: true });
+                onScroll();
+
+                function render() {
+                    currentTime += (targetTime - currentTime) * ease;
+                    if (Math.abs(targetTime - currentTime) > 0.002) {
+                        video.currentTime = currentTime;
+                    }
+                    requestAnimationFrame(render);
+                }
+                requestAnimationFrame(render);
+            }
+        })();
+    </script>
 
 </body>
 </html>
