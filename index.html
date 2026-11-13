@@ -132,36 +132,36 @@
             const video = document.getElementById('scroll-video');
             if (!video) return;
 
+            // Force browser to load and paint the first frame immediately
+            video.load();
+            video.currentTime = 0.05;
+
             let targetTime = 0;
-            let currentTime = 0;
-            const ease = 0.08; // Smooth LERP interpolation factor
+            let currentTime = 0.05;
 
-            // Wait for video metadata to read duration
-            video.addEventListener('loadedmetadata', initScrub);
-            if (video.readyState >= 1) initScrub();
+            function updateScroll() {
+                const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+                const maxScroll = (document.documentElement.scrollHeight - window.innerHeight) || 1;
+                const progress = Math.min(Math.max(scrollY / maxScroll, 0), 1);
+                const duration = video.duration || 3.5;
+                targetTime = progress * duration;
+            }
 
-            function initScrub() {
-                const duration = video.duration || 1;
+            window.addEventListener('scroll', updateScroll, { passive: true });
+            window.addEventListener('resize', updateScroll, { passive: true });
+            video.addEventListener('loadedmetadata', updateScroll);
+            video.addEventListener('canplay', updateScroll);
 
-                function onScroll() {
-                    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-                    const maxScroll = (document.documentElement.scrollHeight - window.innerHeight) || 1;
-                    const progress = Math.min(Math.max(scrollY / maxScroll, 0), 1);
-                    targetTime = progress * duration;
-                }
-
-                window.addEventListener('scroll', onScroll, { passive: true });
-                onScroll();
-
-                function render() {
-                    currentTime += (targetTime - currentTime) * ease;
-                    if (Math.abs(targetTime - currentTime) > 0.002) {
+            function loop() {
+                if (video.duration && !isNaN(video.duration)) {
+                    currentTime += (targetTime - currentTime) * 0.12;
+                    if (Math.abs(targetTime - currentTime) > 0.001) {
                         video.currentTime = currentTime;
                     }
-                    requestAnimationFrame(render);
                 }
-                requestAnimationFrame(render);
+                requestAnimationFrame(loop);
             }
+            requestAnimationFrame(loop);
         })();
     </script>
 

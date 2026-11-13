@@ -57,22 +57,9 @@ body {
     flex-direction: column;
 }
 
-/* --- Cyber Ambient Grid Background --- */
+/* --- Cyber Ambient Grid Background (Handled by Fixed Video Grid) --- */
 body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-image: 
-        radial-gradient(circle at 15% 20%, rgba(0, 242, 254, 0.07) 0%, transparent 40%),
-        radial-gradient(circle at 85% 70%, rgba(255, 0, 85, 0.06) 0%, transparent 45%),
-        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-    background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px;
-    pointer-events: none;
-    z-index: -2;
+    display: none;
 }
 
 /* --- Red Placeholder Highlight --- */
