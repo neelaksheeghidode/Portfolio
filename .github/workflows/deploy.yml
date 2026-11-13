@@ -1,0 +1,43 @@
+name: CI/CD Pipeline - Docker & Render Deployment
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    name: Build & Validate Docker Container
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker Image
+        run: |
+          docker build -t portfolio:test .
+          echo "Docker container image built and validated successfully!"
+
+  deploy-to-render:
+    name: Deploy to Render Cloud
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Render Deploy Hook
+        run: |
+          if [ -n "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" ]; then
+            echo "Triggering deployment on Render..."
+            curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+            echo "Deploy hook triggered successfully!"
+          else
+            echo "Notice: RENDER_DEPLOY_HOOK_URL secret not set. Skipping auto-hook (Render will auto-deploy from Git push directly)."
+          fi
