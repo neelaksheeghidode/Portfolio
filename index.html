@@ -38,7 +38,10 @@
                 <div class="page-tag">
                     <span class="pulse-dot"></span> Junior DevOps & Cloud Enthusiast
                 </div>
-                <h1 class="ignition-headline">Automating Systems.<br><span class="gradient-text">Engineering Scale.</span></h1>
+                <h1 class="hero-title-typewriter" id="typewriter-title">
+                    <span id="tw-line1">Automating Systems.</span><br>
+                    <span class="gradient-text" id="tw-line2">Engineering Scale.</span><span class="type-cursor">_</span>
+                </h1>
                 <p class="hero-desc">
                     Hi, I'm <strong>Neelakshee Ghidode</strong>. An analytical problem-solver and aspiring DevOps Engineer pursuing MCA at BUIT Bhopal. Dedicated to building robust cloud infrastructure, writing automation scripts from scratch, containerizing systems with Docker, and orchestrating CI/CD delivery pipelines.
                 </p>
@@ -67,7 +70,7 @@
                     <span class="corner-bl"></span>
                     <span class="corner-br"></span>
                     
-                    <video id="hero-vid" class="hud-video" autoplay muted playsinline preload="auto">
+                    <video id="hero-vid" class="hud-video" muted playsinline preload="auto">
                         <source src="hero_video.mp4" type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
@@ -152,34 +155,116 @@
         </div>
     </footer>
 
-    <!-- Holographic Cyber HUD Video Playback Controller -->
+    <!-- Typewriter & Forward-Reverse HUD Video Controller -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- 1. Sleek Cyber Terminal Typewriter Effect ---
+            const line1Text = "Automating Systems.";
+            const line2Text = "Engineering Scale.";
+            const line1El = document.getElementById('tw-line1');
+            const line2El = document.getElementById('tw-line2');
+
+            if (line1El && line2El) {
+                line1El.textContent = "";
+                line2El.textContent = "";
+
+                let idx1 = 0;
+                let idx2 = 0;
+                const charSpeed = 45; // ms per character
+
+                function typeLine1() {
+                    if (idx1 < line1Text.length) {
+                        line1El.textContent += line1Text.charAt(idx1);
+                        idx1++;
+                        setTimeout(typeLine1, charSpeed);
+                    } else {
+                        setTimeout(typeLine2, 160);
+                    }
+                }
+
+                function typeLine2() {
+                    if (idx2 < line2Text.length) {
+                        line2El.textContent += line2Text.charAt(idx2);
+                        idx2++;
+                        setTimeout(typeLine2, charSpeed);
+                    }
+                }
+
+                // Begin typing smoothly after 200ms
+                setTimeout(typeLine1, 200);
+            }
+
+            // --- 2. Holographic HUD Video: 2s Delay + Forward-Then-Reverse Playback ---
             const heroVid = document.getElementById('hero-vid');
             const hudCard = document.getElementById('hud-card');
             const replayHint = document.getElementById('replay-hint');
 
             if (heroVid) {
-                // Strictly single play (never loop endlessly)
+                // Ensure native loop is disabled
                 heroVid.loop = false;
 
-                // Autoplay on initial page load (muted allows autoplay on all mobile/desktop browsers)
-                const playPromise = heroVid.play();
-                if (playPromise !== undefined) {
-                    playPromise.catch(() => {
-                        if (replayHint) replayHint.textContent = '[ TAP TO PLAY ]';
-                    });
+                let isReversing = false;
+                let reverseTimer = null;
+
+                function stopReverse() {
+                    if (reverseTimer) {
+                        clearInterval(reverseTimer);
+                        reverseTimer = null;
+                    }
+                    isReversing = false;
                 }
 
-                // When video reaches end, pause on the final frame
-                heroVid.addEventListener('ended', () => {
+                function startReverse() {
+                    if (isReversing) return;
+                    isReversing = true;
                     heroVid.pause();
-                    if (replayHint) replayHint.textContent = '[ TAP TO REPLAY ↺ ]';
+                    if (replayHint) replayHint.textContent = '[ REWINDING ↺ ]';
+
+                    const fps = 25; // Smooth 25fps backward sweep
+                    const step = 1 / fps; // ~0.04s per step
+                    const intervalMs = 1000 / fps; // 40ms interval
+
+                    reverseTimer = setInterval(() => {
+                        if (heroVid.currentTime > 0.06) {
+                            heroVid.currentTime = Math.max(0, heroVid.currentTime - step);
+                        } else {
+                            heroVid.currentTime = 0;
+                            heroVid.pause();
+                            stopReverse();
+                            if (replayHint) replayHint.textContent = '[ TAP TO REPLAY ↺ ]';
+                        }
+                    }, intervalMs);
+                }
+
+                // Trigger reverse when video approaches the end or finishes
+                heroVid.addEventListener('timeupdate', () => {
+                    if (!isReversing && heroVid.duration > 0 && heroVid.currentTime >= heroVid.duration - 0.08) {
+                        startReverse();
+                    }
                 });
 
-                // Tap or click on HUD card to replay from beginning
+                heroVid.addEventListener('ended', () => {
+                    if (!isReversing) {
+                        startReverse();
+                    }
+                });
+
+                // Start video playback after exactly 2 seconds (2000ms)
+                if (replayHint) replayHint.textContent = '[ STANDBY: 2S ]';
+
+                setTimeout(() => {
+                    heroVid.currentTime = 0;
+                    heroVid.play().then(() => {
+                        if (replayHint) replayHint.textContent = '[ PLAYING... ]';
+                    }).catch(() => {
+                        if (replayHint) replayHint.textContent = '[ TAP TO PLAY ]';
+                    });
+                }, 2000);
+
+                // Replay forward then reverse on tap or click
                 if (hudCard) {
                     hudCard.addEventListener('click', () => {
+                        stopReverse();
                         heroVid.currentTime = 0;
                         heroVid.play().then(() => {
                             if (replayHint) replayHint.textContent = '[ PLAYING... ]';
@@ -188,7 +273,9 @@
                 }
 
                 heroVid.addEventListener('play', () => {
-                    if (replayHint) replayHint.textContent = '[ TAP TO REPLAY ]';
+                    if (!isReversing && replayHint) {
+                        replayHint.textContent = '[ PLAYING... ]';
+                    }
                 });
             }
         });
