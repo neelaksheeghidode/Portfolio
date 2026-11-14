@@ -10,14 +10,11 @@
 </head>
 <body>
 
-    <!-- Fixed Full-Screen Scroll-Driven Video Background -->
-    <div class="fixed-video-bg-container">
-        <video id="scroll-video" preload="auto" muted playsinline class="fixed-scroll-video">
-            <source src="hero_video.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-        <div class="fixed-video-overlay"></div>
-        <div class="fixed-video-grid"></div>
+    <!-- Fixed Full-Screen Scroll-Driven Canvas Background -->
+    <div class="fixed-canvas-container">
+        <canvas id="hero-canvas" class="fixed-scroll-canvas"></canvas>
+        <div class="fixed-canvas-overlay"></div>
+        <div class="fixed-canvas-grid"></div>
     </div>
 
     <!-- Cyberpunk Navigation Bar -->
@@ -40,7 +37,7 @@
     <!-- Main Container -->
     <main class="page-container">
         
-        <!-- Hero Section Layered Over Fixed Video -->
+        <!-- Hero Section Layered Over Fixed Background -->
         <section class="hero-section">
             <div class="hero-content">
                 <div class="page-tag">
@@ -126,42 +123,88 @@
         </div>
     </footer>
 
-    <!-- Smooth Scroll-Driven Video Scrubbing Script -->
+    <!-- High-Performance 60FPS Canvas Frame-Scrubbing Engine -->
     <script>
         (function() {
-            const video = document.getElementById('scroll-video');
-            if (!video) return;
+            const canvas = document.getElementById('hero-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
 
-            // Force browser to load and paint the first frame immediately
-            video.load();
-            video.currentTime = 0.05;
+            const frameCount = 162;
+            const getFramePath = (index) => `frames/ezgif-frame-${String(index).padStart(3, '0')}.jpg`;
 
-            let targetTime = 0;
-            let currentTime = 0.05;
+            const images = [];
+            let targetFrame = 1;
+            let currentFrame = 1;
 
-            function updateScroll() {
+            // Resize canvas to full viewport with Retina / High-DPI support
+            function resizeCanvas() {
+                const dpr = window.devicePixelRatio || 1;
+                canvas.width = window.innerWidth * dpr;
+                canvas.height = window.innerHeight * dpr;
+                ctx.scale(dpr, dpr);
+                render();
+            }
+
+            // Draw image maintaining aspect ratio (cover mode)
+            function drawCover(img) {
+                if (!img || !img.complete || img.naturalWidth === 0) return;
+                const cw = window.innerWidth;
+                const ch = window.innerHeight;
+                const iw = img.naturalWidth;
+                const ih = img.naturalHeight;
+
+                const ratio = Math.max(cw / iw, ch / ih);
+                const nw = iw * ratio;
+                const nh = ih * ratio;
+                const cx = (cw - nw) / 2;
+                const cy = (ch - nh) / 2;
+
+                ctx.clearRect(0, 0, cw, ch);
+                ctx.drawImage(img, cx, cy, nw, nh);
+            }
+
+            function render() {
+                const frameIndex = Math.min(Math.max(Math.round(currentFrame), 1), frameCount);
+                const img = images[frameIndex - 1];
+                if (img && img.complete) {
+                    drawCover(img);
+                }
+            }
+
+            // Preload all 162 frames into memory
+            for (let i = 1; i <= frameCount; i++) {
+                const img = new Image();
+                img.src = getFramePath(i);
+                img.onload = () => {
+                    if (i === 1) {
+                        resizeCanvas();
+                    }
+                };
+                images.push(img);
+            }
+
+            // Map scroll progress directly to frame 1 -> 162
+            function onScroll() {
                 const scrollY = window.pageYOffset || document.documentElement.scrollTop;
                 const maxScroll = (document.documentElement.scrollHeight - window.innerHeight) || 1;
                 const progress = Math.min(Math.max(scrollY / maxScroll, 0), 1);
-                const duration = video.duration || 3.5;
-                targetTime = progress * duration;
+                targetFrame = 1 + progress * (frameCount - 1);
             }
 
-            window.addEventListener('scroll', updateScroll, { passive: true });
-            window.addEventListener('resize', updateScroll, { passive: true });
-            video.addEventListener('loadedmetadata', updateScroll);
-            video.addEventListener('canplay', updateScroll);
+            window.addEventListener('scroll', onScroll, { passive: true });
+            window.addEventListener('resize', resizeCanvas, { passive: true });
 
-            function loop() {
-                if (video.duration && !isNaN(video.duration)) {
-                    currentTime += (targetTime - currentTime) * 0.12;
-                    if (Math.abs(targetTime - currentTime) > 0.001) {
-                        video.currentTime = currentTime;
-                    }
-                }
-                requestAnimationFrame(loop);
+            // Butter-smooth 60FPS animation loop (LERP interpolation)
+            function animate() {
+                currentFrame += (targetFrame - currentFrame) * 0.15;
+                render();
+                requestAnimationFrame(animate);
             }
-            requestAnimationFrame(loop);
+
+            resizeCanvas();
+            onScroll();
+            requestAnimationFrame(animate);
         })();
     </script>
 
