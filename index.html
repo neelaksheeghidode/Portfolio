@@ -10,13 +10,6 @@
 </head>
 <body>
 
-    <!-- Fixed Full-Screen Scroll-Driven Canvas Background -->
-    <div class="fixed-canvas-container">
-        <canvas id="hero-canvas" class="fixed-scroll-canvas"></canvas>
-        <div class="fixed-canvas-overlay"></div>
-        <div class="fixed-canvas-grid"></div>
-    </div>
-
     <!-- Cyberpunk Navigation Bar -->
     <header class="navbar">
         <a href="index.html" class="logo">
@@ -37,21 +30,57 @@
     <!-- Main Container -->
     <main class="page-container">
         
-        <!-- Hero Section Layered Over Fixed Background -->
+        <!-- Hero Section: Balanced 2-Column with Cyber Ignition & Holographic HUD Video -->
         <section class="hero-section">
+            
+            <!-- Left Column: Hero Text with Cyber Ignition Reveal -->
             <div class="hero-content">
                 <div class="page-tag">
                     <span class="pulse-dot"></span> Junior DevOps & Cloud Enthusiast
                 </div>
-                <h1>Automating Systems.<br><span class="gradient-text">Engineering Scale.</span></h1>
+                <h1 class="ignition-headline">Automating Systems.<br><span class="gradient-text">Engineering Scale.</span></h1>
                 <p class="hero-desc">
-                    Hi, I'm <strong style="color: var(--neon-cyan);">Neelakshee Ghidode</strong>. An analytical problem-solver and aspiring DevOps Engineer pursuing MCA at BUIT Bhopal. Dedicated to building robust cloud infrastructure, writing automation scripts from scratch, containerizing systems with Docker, and orchestrating CI/CD delivery pipelines.
+                    Hi, I'm <strong>Neelakshee Ghidode</strong>. An analytical problem-solver and aspiring DevOps Engineer pursuing MCA at BUIT Bhopal. Dedicated to building robust cloud infrastructure, writing automation scripts from scratch, containerizing systems with Docker, and orchestrating CI/CD delivery pipelines.
                 </p>
                 <div class="btn-group">
                     <a href="projects.html" class="primary-btn">Explore Proof of Work →</a>
-                    <a href="platforms.html" class="secondary-btn">Initiate Dispatch</a>
+                    <a href="platforms.html" class="secondary-btn">Connect With Me_</a>
                 </div>
             </div>
+
+            <!-- Right Column: Holographic Cyber HUD Video Box -->
+            <div class="hero-hud-card" id="hud-card" title="Click or tap to replay video">
+                
+                <!-- HUD Top Status Bar -->
+                <div class="hud-status-bar">
+                    <div class="hud-status-left">
+                        <span class="pulse-dot"></span>
+                        <span>SYSTEM_ACTIVE // 60 FPS</span>
+                    </div>
+                    <span class="hud-replay-hint" id="replay-hint">[ TAP TO REPLAY ]</span>
+                </div>
+
+                <!-- HUD Video Wrapper -->
+                <div class="hud-video-wrapper">
+                    <span class="corner-tl"></span>
+                    <span class="corner-tr"></span>
+                    <span class="corner-bl"></span>
+                    <span class="corner-br"></span>
+                    
+                    <video id="hero-vid" class="hud-video" autoplay muted playsinline preload="auto">
+                        <source src="hero_video.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+
+                <!-- HUD Bottom Info Bar -->
+                <div class="hud-bottom-bar">
+                    <span>docker run -d --name neelakshee-portfolio</span>
+                    <span style="color: var(--neon-cyan);">[PORT 80:HTTP]</span>
+                </div>
+
+            </div>
+
         </section>
 
         <!-- Live Terminal Status Card -->
@@ -123,117 +152,46 @@
         </div>
     </footer>
 
-    <!-- High-Performance 60FPS Canvas Frame-Scrubbing Engine -->
+    <!-- Holographic Cyber HUD Video Playback Controller -->
     <script>
-        (function() {
-            const canvas = document.getElementById('hero-canvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
+        document.addEventListener('DOMContentLoaded', () => {
+            const heroVid = document.getElementById('hero-vid');
+            const hudCard = document.getElementById('hud-card');
+            const replayHint = document.getElementById('replay-hint');
 
-            // Optimized Frame Set: Use step of 2 to cut network payload by 50%
-            // Total 81 frames loads in ~1s on 4G and runs at silky 60FPS
-            const totalSourceFrames = 162;
-            const step = 2; 
-            const frameIndices = [];
-            for (let i = 1; i <= totalSourceFrames; i += step) {
-                frameIndices.push(i);
-            }
-            if (frameIndices[frameIndices.length - 1] !== totalSourceFrames) {
-                frameIndices.push(totalSourceFrames);
-            }
-            const frameCount = frameIndices.length;
+            if (heroVid) {
+                // Strictly single play (never loop endlessly)
+                heroVid.loop = false;
 
-            const getFramePath = (actualFrameNum) => `frames/ezgif-frame-${String(actualFrameNum).padStart(3, '0')}.jpg`;
-
-            const images = new Array(frameCount);
-            let lastRenderedImg = null;
-            let targetFrame = 1;
-            let currentFrame = 1;
-
-            // Resize canvas to full viewport with High-DPI support
-            function resizeCanvas() {
-                const dpr = window.devicePixelRatio || 1;
-                canvas.width = window.innerWidth * dpr;
-                canvas.height = window.innerHeight * dpr;
-                ctx.scale(dpr, dpr);
-                render();
-            }
-
-            // Draw image maintaining aspect ratio and subject positioning
-            function drawCover(img) {
-                if (!img || !img.complete || img.naturalWidth === 0) return;
-                const cw = window.innerWidth;
-                const ch = window.innerHeight;
-                const iw = img.naturalWidth;
-                const ih = img.naturalHeight;
-
-                const ratio = Math.max(cw / iw, ch / ih);
-                const nw = iw * ratio;
-                const nh = ih * ratio;
-
-                // On desktop: anchor subject towards right 70% so text on left is 100% open
-                // On mobile: center subject at 50%
-                const anchorX = cw >= 992 ? 0.70 : 0.5;
-                const anchorY = 0.32; // upper-third anchor keeps sunglasses & face visible
-                const cx = (cw - nw) * anchorX;
-                const cy = (ch - nh) * anchorY;
-
-                ctx.clearRect(0, 0, cw, ch);
-                ctx.drawImage(img, cx, cy, nw, nh);
-                lastRenderedImg = img;
-            }
-
-            function render() {
-                const index = Math.min(Math.max(Math.round(currentFrame), 1), frameCount) - 1;
-                const img = images[index];
-                if (img && img.complete && img.naturalWidth !== 0) {
-                    drawCover(img);
-                } else if (lastRenderedImg) {
-                    // Fallback to previous loaded frame while loading (never flicker to black!)
-                    drawCover(lastRenderedImg);
+                // Autoplay on initial page load (muted allows autoplay on all mobile/desktop browsers)
+                const playPromise = heroVid.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(() => {
+                        if (replayHint) replayHint.textContent = '[ TAP TO PLAY ]';
+                    });
                 }
+
+                // When video reaches end, pause on the final frame
+                heroVid.addEventListener('ended', () => {
+                    heroVid.pause();
+                    if (replayHint) replayHint.textContent = '[ TAP TO REPLAY ↺ ]';
+                });
+
+                // Tap or click on HUD card to replay from beginning
+                if (hudCard) {
+                    hudCard.addEventListener('click', () => {
+                        heroVid.currentTime = 0;
+                        heroVid.play().then(() => {
+                            if (replayHint) replayHint.textContent = '[ PLAYING... ]';
+                        }).catch(err => console.log('Playback error:', err));
+                    });
+                }
+
+                heroVid.addEventListener('play', () => {
+                    if (replayHint) replayHint.textContent = '[ TAP TO REPLAY ]';
+                });
             }
-
-            // 1. Immediately load frame 1 for instant display (< 50ms)
-            const firstImg = new Image();
-            firstImg.src = getFramePath(frameIndices[0]);
-            firstImg.onload = () => {
-                images[0] = firstImg;
-                resizeCanvas();
-            };
-
-            // 2. Preload remaining optimized frames in background
-            for (let i = 0; i < frameCount; i++) {
-                if (i === 0) continue;
-                const img = new Image();
-                img.src = getFramePath(frameIndices[i]);
-                img.onload = () => {
-                    images[i] = img;
-                };
-            }
-
-            // Map scroll progress directly to frame sequence
-            function onScroll() {
-                const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-                const maxScroll = (document.documentElement.scrollHeight - window.innerHeight) || 1;
-                const progress = Math.min(Math.max(scrollY / maxScroll, 0), 1);
-                targetFrame = 1 + progress * (frameCount - 1);
-            }
-
-            window.addEventListener('scroll', onScroll, { passive: true });
-            window.addEventListener('resize', resizeCanvas, { passive: true });
-
-            // Smooth 60FPS animation loop (LERP interpolation)
-            function animate() {
-                currentFrame += (targetFrame - currentFrame) * 0.16;
-                render();
-                requestAnimationFrame(animate);
-            }
-
-            resizeCanvas();
-            onScroll();
-            requestAnimationFrame(animate);
-        })();
+        });
     </script>
 
 </body>

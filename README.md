@@ -135,7 +135,7 @@ chmod +x git.sh
 <div align="center">
 
 [![GitHub](https://img.shields.io/badge/GitHub-neelakshighidode-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/neelakshighidode)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/neelakshee-ghidode-a85009407/)
 [![Docker Hub](https://img.shields.io/badge/Docker_Hub-Repositories-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://hub.docker.com)
 [![Email](https://img.shields.io/badge/Email-Contact_Direct-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:neelakshighidode24@gmail.com)
 
