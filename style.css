@@ -361,6 +361,9 @@ body::before {
     transition: var(--transition);
     cursor: pointer;
     position: relative;
+    width: 100%;
+    max-width: 480px;       /* <-- Yeh box ko poori screen par felne se rogega */
+    justify-self: center;   /* <-- Right side mein bilkul center/balance rakhega */
 }
 
 .hero-hud-card:hover {
@@ -399,7 +402,7 @@ body::before {
 .hud-video-wrapper {
     position: relative;
     width: 100%;
-    aspect-ratio: 9 / 16 ;
+    aspect-ratio: 16 / 9;   /* <-- YouTube ke liye exact 16:9 standard ratio */
     overflow: hidden;
     background: #000;
 }
@@ -407,7 +410,7 @@ body::before {
 .hud-video {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;      /* <-- Video ko box ke andar ekdum clean fit karega bina fate */
     object-position: center;
     filter: brightness(0.96) contrast(1.08);
     display: block;
