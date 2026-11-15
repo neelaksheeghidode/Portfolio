@@ -239,8 +239,8 @@ body::before {
    ======================================================== */
 .hero-section {
     display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 60px;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 48px;
     align-items: center;
     min-height: 76vh;
     padding: 30px 0 60px;
@@ -248,7 +248,7 @@ body::before {
 
 /* --- Left Column: Hero Text with Cyber Terminal Typewriter --- */
 .hero-content {
-    max-width: 640px;
+    max-width: 620px;
 }
 
 .hero-title-typewriter {
@@ -362,8 +362,8 @@ body::before {
     cursor: pointer;
     position: relative;
     width: 100%;
-    max-width: 480px;       /* <-- Yeh box ko poori screen par felne se rogega */
-    justify-self: center;   /* <-- Right side mein bilkul center/balance rakhega */
+    max-width: 440px;       /* <-- Box ko zyada bada/felne se rokega */
+    justify-self: end;      /* <-- Right side mein clean align karega */
 }
 
 .hero-hud-card:hover {
@@ -375,13 +375,13 @@ body::before {
 /* HUD Top Header */
 .hud-status-bar {
     background: rgba(10, 12, 18, 0.95);
-    padding: 12px 18px;
+    padding: 10px 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid var(--border-cyber);
     font-family: var(--font-mono);
-    font-size: 0.78rem;
+    font-size: 0.75rem;
 }
 
 .hud-status-left {
@@ -393,7 +393,7 @@ body::before {
 
 .hud-replay-hint {
     color: var(--neon-pink);
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     letter-spacing: 0.05em;
     opacity: 0.85;
 }
@@ -402,7 +402,7 @@ body::before {
 .hud-video-wrapper {
     position: relative;
     width: 100%;
-    aspect-ratio: 16 / 9;   /* <-- YouTube ke liye exact 16:9 standard ratio */
+    aspect-ratio: 16 / 9;
     overflow: hidden;
     background: #000;
 }
@@ -410,7 +410,7 @@ body::before {
 .hud-video {
     width: 100%;
     height: 100%;
-    object-fit: cover;      /* <-- Video ko box ke andar ekdum clean fit karega bina fate */
+    object-fit: cover;
     object-position: center;
     filter: brightness(0.96) contrast(1.08);
     display: block;
