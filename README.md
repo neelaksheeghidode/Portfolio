@@ -101,7 +101,7 @@ cd Portfolio
 # Spin up the container
 docker compose up -d
 
-# Visit in your browser:
+# Visit in your browser:-
 # http://localhost:8080
 ```
 
