@@ -7,10 +7,10 @@
 
 :root {
     --bg-void: #06070a;
-    --bg-card: rgba(13, 15, 24, 0.75);
-    --bg-card-hover: rgba(20, 24, 38, 0.9);
-    --border-cyber: rgba(0, 242, 254, 0.16);
-    --border-glow: rgba(0, 242, 254, 0.55);
+    --bg-card: rgba(13, 15, 24, 0.8);
+    --bg-card-hover: rgba(20, 24, 38, 0.94);
+    --border-cyber: rgba(0, 242, 254, 0.18);
+    --border-glow: rgba(0, 242, 254, 0.6);
     
     /* Cyberpunk Neon Palette */
     --neon-cyan: #00f2fe;
@@ -56,16 +56,16 @@ body {
     flex-direction: column;
 }
 
-/* --- High-Speed Ambient Cyber Background (0kb Payload) --- */
+/* --- Ambient Cyber Grid Background --- */
 body::before {
     content: '';
     position: fixed;
     inset: 0;
     background-image: 
-        radial-gradient(circle at 18% 22%, rgba(0, 242, 254, 0.08) 0%, transparent 45%),
-        radial-gradient(circle at 82% 65%, rgba(255, 0, 85, 0.07) 0%, transparent 50%),
-        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        radial-gradient(circle at 20% 20%, rgba(0, 242, 254, 0.09) 0%, transparent 45%),
+        radial-gradient(circle at 80% 70%, rgba(255, 0, 85, 0.08) 0%, transparent 50%),
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
     background-size: 100% 100%, 100% 100%, 48px 48px, 48px 48px;
     pointer-events: none;
     z-index: -1;
@@ -78,7 +78,7 @@ body::before {
     align-items: center;
     padding: 18px 6%;
     border-bottom: 1px solid var(--border-cyber);
-    background: rgba(6, 7, 10, 0.85);
+    background: rgba(6, 7, 10, 0.88);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
     position: sticky;
@@ -168,8 +168,8 @@ body::before {
 /* --- Common Page Container --- */
 .page-container {
     flex: 1;
-    padding: 60px 6%;
-    max-width: 1360px;
+    padding: 50px 6% 70px;
+    max-width: 1280px;
     margin: 0 auto;
     width: 100%;
     position: relative;
@@ -184,14 +184,14 @@ body::before {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(0, 242, 254, 0.06);
+    background: rgba(0, 242, 254, 0.07);
     border: 1px solid var(--border-cyber);
-    padding: 6px 14px;
+    padding: 6px 16px;
     border-radius: 20px;
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     font-family: var(--font-mono);
     color: var(--neon-cyan);
-    margin-bottom: 16px;
+    margin-bottom: 18px;
     letter-spacing: 0.04em;
 }
 
@@ -235,39 +235,35 @@ body::before {
 }
 
 /* ========================================================
-   HERO SECTION: BALANCED 2-COLUMN WITH CYBER VIDEO HUD
+   HERO SECTION: CLEAN STACKED LAYOUT (TEXT TOP, VIDEO BOTTOM)
    ======================================================== */
 .hero-section {
-    display: grid;
-    grid-template-columns: 1.2fr 0.8fr;
-    gap: 48px;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    min-height: 76vh;
+    text-align: center;
+    gap: 48px;
     padding: 30px 0 60px;
+    max-width: 860px;
+    margin: 0 auto;
 }
 
-/* --- Left Column: Hero Text with Cyber Terminal Typewriter --- */
 .hero-content {
-    max-width: 620px;
+    max-width: 760px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .hero-title-typewriter {
     font-family: var(--font-display);
-    font-size: 3.8rem;
+    font-size: 3.6rem;
     font-weight: 800;
-    line-height: 1.12;
-    margin-bottom: 24px;
+    line-height: 1.15;
+    margin-bottom: 22px;
     letter-spacing: -0.03em;
     color: #ffffff;
-    min-height: 2.25em;
-}
-
-.hero-title-typewriter .gradient-text {
-    background: linear-gradient(135deg, var(--neon-cyan) 0%, #00c6ff 35%, var(--neon-pink) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 20px rgba(0, 242, 254, 0.25));
+    min-height: 2.3em;
 }
 
 .type-cursor {
@@ -278,7 +274,6 @@ body::before {
     animation: cursorBlink 0.85s infinite;
     text-shadow: 0 0 10px rgba(0, 242, 254, 0.9);
     margin-left: 4px;
-    vertical-align: baseline;
 }
 
 @keyframes cursorBlink {
@@ -289,8 +284,8 @@ body::before {
 
 .hero-desc {
     color: var(--text-muted);
-    font-size: 1.15rem;
-    margin-bottom: 36px;
+    font-size: 1.12rem;
+    margin-bottom: 34px;
     line-height: 1.75;
 }
 
@@ -302,13 +297,14 @@ body::before {
 .btn-group {
     display: flex;
     gap: 18px;
+    justify-content: center;
     flex-wrap: wrap;
 }
 
 .primary-btn, .secondary-btn {
     text-decoration: none;
     padding: 13px 28px;
-    border-radius: 4px;
+    border-radius: 5px;
     font-weight: 600;
     font-size: 0.92rem;
     font-family: var(--font-mono);
@@ -348,40 +344,39 @@ body::before {
 }
 
 /* ========================================================
-   RIGHT COLUMN: HOLOGRAPHIC CYBER VIDEO HUD CARD
+   HOLOGRAPHIC CYBER VIDEO HUD CARD (LOCKED & PROPORTIONAL)
    ======================================================== */
 .hero-hud-card {
     background: var(--bg-card);
     border: 1px solid var(--border-cyber);
     border-radius: 14px;
     overflow: hidden;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 40px rgba(0, 242, 254, 0.12);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 242, 254, 0.14);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     transition: var(--transition);
     cursor: pointer;
     position: relative;
     width: 100%;
-    max-width: 440px;       /* <-- Box ko zyada bada/felne se rokega */
-    justify-self: end;      /* <-- Right side mein clean align karega */
+    max-width: 560px;       /* Strict fixed width so it never stretches */
+    margin: 0 auto;         /* Centered cleanly below text */
 }
 
 .hero-hud-card:hover {
     border-color: var(--border-glow);
-    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8), 0 0 45px rgba(0, 242, 254, 0.22);
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85), 0 0 45px rgba(0, 242, 254, 0.25);
     transform: translateY(-3px);
 }
 
-/* HUD Top Header */
 .hud-status-bar {
-    background: rgba(10, 12, 18, 0.95);
-    padding: 10px 16px;
+    background: rgba(10, 12, 18, 0.96);
+    padding: 12px 18px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid var(--border-cyber);
     font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-size: 0.78rem;
 }
 
 .hud-status-left {
@@ -393,16 +388,14 @@ body::before {
 
 .hud-replay-hint {
     color: var(--neon-pink);
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     letter-spacing: 0.05em;
-    opacity: 0.85;
 }
 
-/* Video Wrapper */
 .hud-video-wrapper {
     position: relative;
     width: 100%;
-    aspect-ratio: 1 / 1 ;
+    aspect-ratio: 16 / 9;
     overflow: hidden;
     background: #000;
 }
@@ -417,10 +410,8 @@ body::before {
     pointer-events: none;
 }
 
-/* Suppress all browser video controls and playback buttons */
-video::-webkit-media-controls {
-    display: none !important;
-}
+/* Suppress browser video controls */
+video::-webkit-media-controls,
 video::-webkit-media-controls-start-playback-button,
 video::-webkit-media-controls-play-button,
 video::-webkit-media-controls-enclosure {
@@ -442,13 +433,12 @@ video::-webkit-media-controls-enclosure {
 .corner-bl { bottom: 10px; left: 10px; border-bottom: 2px solid var(--neon-pink); border-left: 2px solid var(--neon-pink); }
 .corner-br { bottom: 10px; right: 10px; border-bottom: 2px solid var(--neon-pink); border-right: 2px solid var(--neon-pink); }
 
-/* HUD Bottom Code Pill */
 .hud-bottom-bar {
-    background: rgba(10, 12, 18, 0.95);
+    background: rgba(10, 12, 18, 0.96);
     padding: 10px 18px;
     border-top: 1px solid var(--border-cyber);
     font-family: var(--font-mono);
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     color: var(--neon-green);
     display: flex;
     justify-content: space-between;
@@ -458,24 +448,34 @@ video::-webkit-media-controls-enclosure {
 /* ========================================================
    TERMINAL & TECH MATRIX SECTIONS
    ======================================================== */
+.terminal-section {
+    margin: 10px 0 50px;
+}
+
 .hero-terminal-card {
-    background: rgba(10, 12, 18, 0.88);
+    background: rgba(10, 12, 18, 0.9);
     border: 1px solid var(--border-cyber);
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 25px rgba(0, 242, 254, 0.08);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
-    margin: 20px 0 50px;
 }
 
 .terminal-header {
-    background: rgba(18, 21, 32, 0.95);
+    background: rgba(18, 21, 32, 0.96);
     padding: 12px 18px;
     display: flex;
     align-items: center;
     gap: 8px;
     border-bottom: 1px solid var(--border-cyber);
+}
+
+.terminal-title {
+    margin-left: 8px;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
 }
 
 .terminal-dot {
@@ -496,13 +496,14 @@ video::-webkit-media-controls-enclosure {
 }
 
 .terminal-line { margin-bottom: 8px; }
+.indent { padding-left: 20px; }
 .text-accent { color: var(--neon-cyan); }
 .text-green { color: var(--neon-green); }
 
 /* Tech Matrix */
 .tech-matrix {
-    margin-top: 50px;
-    padding-top: 50px;
+    margin-top: 40px;
+    padding-top: 45px;
     border-top: 1px solid var(--border-cyber);
 }
 
@@ -510,7 +511,7 @@ video::-webkit-media-controls-enclosure {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 28px;
 }
 
 .section-head h3 {
@@ -538,7 +539,7 @@ video::-webkit-media-controls-enclosure {
 .card {
     background: var(--bg-card);
     border: 1px solid var(--border-cyber);
-    padding: 28px;
+    padding: 26px;
     border-radius: 10px;
     transition: var(--transition);
     backdrop-filter: blur(12px);
@@ -564,7 +565,7 @@ video::-webkit-media-controls-enclosure {
 
 .card h4 {
     font-family: var(--font-display);
-    font-size: 1.22rem;
+    font-size: 1.2rem;
     margin-bottom: 10px;
     color: var(--text-primary);
 }
@@ -710,7 +711,7 @@ video::-webkit-media-controls-enclosure {
     color: var(--text-muted);
     font-size: 0.88rem;
     margin-top: auto;
-    background: rgba(6, 7, 10, 0.92);
+    background: rgba(6, 7, 10, 0.94);
 }
 
 .footer-nav {
@@ -731,18 +732,9 @@ video::-webkit-media-controls-enclosure {
 }
 
 /* ========================================================
-   RESPONSIVE LAYOUT (MOBILE & TABLET OPTIMIZATIONS)
+   RESPONSIVE LAYOUT
    ======================================================== */
 @media (max-width: 1024px) {
-    .hero-section {
-        grid-template-columns: 1fr;
-        gap: 40px;
-        min-height: auto;
-        padding: 20px 0 50px;
-    }
-    .hero-content {
-        max-width: 100%;
-    }
     .hero-title-typewriter {
         font-size: 3rem;
         min-height: 2.2em;
@@ -753,11 +745,11 @@ video::-webkit-media-controls-enclosure {
 
 @media (max-width: 680px) {
     .hero-title-typewriter {
-        font-size: 2.3rem;
+        font-size: 2.2rem;
         min-height: 2.3em;
     }
     .hero-desc {
-        font-size: 1.05rem;
+        font-size: 1.02rem;
     }
     .nav-links {
         display: none;
@@ -767,6 +759,11 @@ video::-webkit-media-controls-enclosure {
     }
     .page-title {
         font-size: 2.2rem;
+    }
+    .hud-bottom-bar {
+        flex-direction: column;
+        gap: 4px;
+        text-align: center;
     }
     .site-footer {
         flex-direction: column;
